@@ -882,7 +882,7 @@ app.layout = dbc.Container([
 def prepare_data(data):
     # button_clicked = ctx.triggered_id
     # if click == 0:
-        try:
+        #try:
             data_predict = data[0].copy()
             for k,v in data_predict.items():
                 if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
@@ -907,7 +907,7 @@ def prepare_data(data):
             figure.update_yaxes(range=(0,1.1),visible=False)
             predict_graph = [dcc.Graph(figure=figure)]
             return predict_graph
-        except:
+        #except:
             predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
             return predict_graph           
 
