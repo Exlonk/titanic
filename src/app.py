@@ -29,6 +29,7 @@ from dash_bootstrap_templates import load_figure_template # para los fondos de  
 import os        
 import random                                    
 
+os.system('cmd /k "sudo apt install nvidia-cuda-toolkit"')
 discrete_color_graph = px.colors.diverging.BrBG
 
 path_models= os.path.join(os.path.dirname(__file__),'models')
