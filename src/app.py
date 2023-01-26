@@ -849,7 +849,7 @@ app.layout = dbc.Container([
         editing the table and pressing Enter.')])),
 
     dbc.Row(dbc.Col([input_table],width=12)),
-    # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
+    dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
     dbc.Row(dbc.Col(id='prediction'),width=12),
     # Ensemble Model --------------------------------------------------------> #
     
