@@ -850,7 +850,7 @@ app.layout = dbc.Container([
 
     dbc.Row(dbc.Col([input_table],width=12)),
     # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction',[html.Div('hola')]),
+    dbc.Row(dbc.Col(id='prediction')),
     dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_network)],width=6),dbc.Col([dcc.Graph(figure=pr_test_network)],width=6)]),
     # Ensemble Model --------------------------------------------------------> #
     
