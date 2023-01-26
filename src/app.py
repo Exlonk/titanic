@@ -70,45 +70,45 @@ columns_description=["Survived: Survival [0 no, 1 yes]", "Pclass = Ticket class"
 
 table = ds.table(df,bgcolor="#0f2537",textcolor='#fff',bgheader='#07121B',columns_description=columns_description)  # [DASH COMPONENT TALBE]
 
-# shape = load_plot_json(path_figures,'shape')
-# shape.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# info_fig = load_plot_json(path_figures,'info_fig')  
-# info_fig.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+shape = load_plot_json(path_figures,'shape')
+shape.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+info_fig = load_plot_json(path_figures,'info_fig')  
+info_fig.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
 
-# # Duplicates and Missing values
+# Duplicates and Missing values
 
-# duplicates, missing_values = load_plot_json(path_figures,'duplicates'), load_plot_json(path_figures,'missing_values')   
-# duplicates.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# missing_values.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# missing_values.update_yaxes(range=(0,750))
+duplicates, missing_values = load_plot_json(path_figures,'duplicates'), load_plot_json(path_figures,'missing_values')   
+duplicates.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+missing_values.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+missing_values.update_yaxes(range=(0,750))
 
-# # Number of categories
+# Number of categories
 
-# number_of_categories_1, number_of_categories_2 = load_plot_json(path_figures,'number_of_categories_1'), load_plot_json(path_figures,'number_of_categories_2')
-# number_of_categories_1.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# number_of_categories_2.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+number_of_categories_1, number_of_categories_2 = load_plot_json(path_figures,'number_of_categories_1'), load_plot_json(path_figures,'number_of_categories_2')
+number_of_categories_1.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+number_of_categories_2.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
 
-# # Class count
+# Class count
 
-# class_count=load_plot_json(path_figures,'class_count')
-# class_count.update_traces(showlegend=False)
-# class_count.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+class_count=load_plot_json(path_figures,'class_count')
+class_count.update_traces(showlegend=False)
+class_count.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
 
-# # Outliers 
+# Outliers 
 
-# box_plot_pure = load_plot_json(path_figures,'box_plot_pure')
-# box_plot_pure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+box_plot_pure = load_plot_json(path_figures,'box_plot_pure')
+box_plot_pure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
 
-# box_plot_ifo = load_plot_json(path_figures,'box_plot_ifo')
-# box_plot_lof = load_plot_json(path_figures,'box_plot_lof')
-# box_plot_ifo.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# box_plot_lof.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+box_plot_ifo = load_plot_json(path_figures,'box_plot_ifo')
+box_plot_lof = load_plot_json(path_figures,'box_plot_lof')
+box_plot_ifo.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+box_plot_lof.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
 
-# box_plot_pure.update_xaxes(range=[-0.5,1.5])
-# box_plot_ifo.update_xaxes(range=[-0.5,1.5])
-# box_plot_lof.update_xaxes(range=[-0.5,1.5])
+box_plot_pure.update_xaxes(range=[-0.5,1.5])
+box_plot_ifo.update_xaxes(range=[-0.5,1.5])
+box_plot_lof.update_xaxes(range=[-0.5,1.5])
 
-# # X_transform_ifo = X_transform_ifo.drop(columns=['SibSp'])
+# X_transform_ifo = X_transform_ifo.drop(columns=['SibSp'])
 
 
 # # <--------------------------------------------------------------------------> #
@@ -128,37 +128,37 @@ y_cv = pd.read_csv(os.path.join(path_dataframes,'y_cv.csv'))
 y_test = pd.read_csv(os.path.join(path_dataframes,'y_test.csv'))
 # # Sample Distribution --------------------------------------------------------->
 
-# y_train_sample = pd.DataFrame(y_train).copy()
-# y_train_sample['set']='train'
-# y_cv_sample = pd.DataFrame(y_cv).copy()
-# y_cv_sample['set']='cv'
-# y_test_sample = pd.DataFrame(y_test).copy()
-# y_test_sample['set']='test'
+y_train_sample = pd.DataFrame(y_train).copy()
+y_train_sample['set']='train'
+y_cv_sample = pd.DataFrame(y_cv).copy()
+y_cv_sample['set']='cv'
+y_test_sample = pd.DataFrame(y_test).copy()
+y_test_sample['set']='test'
 
-# sample_distribution_df = pd.concat([y_test_sample,y_train_sample,y_cv_sample],ignore_index=True)
-# sample_distribution_fig = px.scatter(sample_distribution_df,y='target',color='set',color_discrete_sequence=['#dfc27d','#543005',"#003c30"])
-# sample_distribution_fig.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+sample_distribution_df = pd.concat([y_test_sample,y_train_sample,y_cv_sample],ignore_index=True)
+sample_distribution_fig = px.scatter(sample_distribution_df,y='target',color='set',color_discrete_sequence=['#dfc27d','#543005',"#003c30"])
+sample_distribution_fig.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
 
-# # <--------------------------------------------------------------------------> #
-# # <---------------------------- Feature Selection ---------------------------> #
+# <--------------------------------------------------------------------------> #
+# <---------------------------- Feature Selection ---------------------------> #
 
-# # Numerical Features
-# mutual_classification_correlation_num = load_plot_json(path_figures,'mutual_classification_correlation_num')
-# anova_correlation = load_plot_json(path_figures,'anova_correlation')
+# Numerical Features
+mutual_classification_correlation_num = load_plot_json(path_figures,'mutual_classification_correlation_num')
+anova_correlation = load_plot_json(path_figures,'anova_correlation')
 
-# # Categorical Features
-# chi2_correlation = load_plot_json(path_figures,'chi2_correlation')
-# mutual_classification_correlation_cat = load_plot_json(path_figures,'mutual_classification_correlation_cat')
+# Categorical Features
+chi2_correlation = load_plot_json(path_figures,'chi2_correlation')
+mutual_classification_correlation_cat = load_plot_json(path_figures,'mutual_classification_correlation_cat')
 
-# # Layout graphs
-# chi2_correlation.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'},xaxis_title="")
-# mutual_classification_correlation_cat.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# mutual_classification_correlation_num.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# anova_correlation.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-# chi2_correlation.update_yaxes(range=(0,185))
-# mutual_classification_correlation_cat.update_yaxes(range=(0,0.20))
-# anova_correlation.update_yaxes(range=(0,75))
-# mutual_classification_correlation_num.update_yaxes(range=(0,0.65))
+# Layout graphs
+chi2_correlation.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'},xaxis_title="")
+mutual_classification_correlation_cat.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+mutual_classification_correlation_num.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+anova_correlation.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+chi2_correlation.update_yaxes(range=(0,185))
+mutual_classification_correlation_cat.update_yaxes(range=(0,0.20))
+anova_correlation.update_yaxes(range=(0,75))
+mutual_classification_correlation_num.update_yaxes(range=(0,0.65))
 
 # <--------------------------------------------------------------------------> #
 # <-------------------------- MACHINE LEARNING MODELS -----------------------> #
@@ -596,256 +596,256 @@ draw_figure_buttons = {'modeBarButtonsToAdd':['drawline',
 
 app.layout = dbc.Container([ 
 
-    # dbc.Row(dbc.Col([html.H1('Titanic DataFrame')],width=6,className="title")),
-    #  dbc.Row(dbc.Col([html.H4('by Exlonk Gil')],width=12)),
-    # dbc.Row(dbc.Col([html.H2('Raw Data Insights')],width=12,    
-    # style={"padding-top":"1rem","padding-bottom":"1rem","textAlign":"center"})),
+    dbc.Row(dbc.Col([html.H1('Titanic DataFrame')],width=6,className="title")),
+     dbc.Row(dbc.Col([html.H4('by Exlonk Gil')],width=12)),
+    dbc.Row(dbc.Col([html.H2('Raw Data Insights')],width=12,    
+    style={"padding-top":"1rem","padding-bottom":"1rem","textAlign":"center"})),
 
-    # dbc.Row(dbc.Col([html.P('This dataset shows the survivors to the titanic \
-    # accident (1: Survive, 0: Not Survive), because of this, it is a classifier \
-    # problem and due to its small size, the estimators used to modeling can be \
-    # very widely. For a detailed description of each feature, the table headers can be hovered.')])),
+    dbc.Row(dbc.Col([html.P('This dataset shows the survivors to the titanic \
+    accident (1: Survive, 0: Not Survive), because of this, it is a classifier \
+    problem and due to its small size, the estimators used to modeling can be \
+    very widely. For a detailed description of each feature, the table headers can be hovered.')])),
 
-    # dbc.Row(dbc.Col(html.Br(),width=12)), # LINEA EN BLANCO
+    dbc.Row(dbc.Col(html.Br(),width=12)), # LINEA EN BLANCO
 
-    # dbc.Row(dbc.Col([table],width=12)),
+    dbc.Row(dbc.Col([table],width=12)),
 
-    # dbc.Row(dbc.Col(html.Br(),width=12)), # LINEA EN BLANCO
+    dbc.Row(dbc.Col(html.Br(),width=12)), # LINEA EN BLANCO
 
-    # dbc.Row(dbc.Col([html.P('It can be seen that the features are mainly categorical, \
-    # and that there are some features that lack importance, such as the feature "name" \
-    # and the "ticket".')])),
+    dbc.Row(dbc.Col([html.P('It can be seen that the features are mainly categorical, \
+    and that there are some features that lack importance, such as the feature "name" \
+    and the "ticket".')])),
 
-    # # Raw Data visualization
-    # dbc.Row(dbc.Col(html.Br(),width=12)), # Blank space
+    # Raw Data visualization
+    dbc.Row(dbc.Col(html.Br(),width=12)), # Blank space
 
-    # dbc.Row(dbc.Col([html.P('The shape figure shows how many features and instances \
-    # are in the dataframe, the data type figure shows the type and number of each \
-    # feature, and the target categories histograms show the data imbalance.')])),
+    dbc.Row(dbc.Col([html.P('The shape figure shows how many features and instances \
+    are in the dataframe, the data type figure shows the type and number of each \
+    feature, and the target categories histograms show the data imbalance.')])),
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=shape)],width=3),
-    #          dbc.Col([dcc.Graph(figure=info_fig)],width=6),
-    #          dbc.Col([dcc.Graph(figure=class_count)],width=3)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=shape)],width=3),
+             dbc.Col([dcc.Graph(figure=info_fig)],width=6),
+             dbc.Col([dcc.Graph(figure=class_count)],width=3)]),
 
-    # dbc.Row(dbc.Col([html.P('It can be seen from these graphs that the data set \
-    # has few features and only three of them are numerical, besides the target data \
-    # is unbalanced.')])),
+    dbc.Row(dbc.Col([html.P('It can be seen from these graphs that the data set \
+    has few features and only three of them are numerical, besides the target data \
+    is unbalanced.')])),
 
-    # # <------------------------- DATA CLEANING -------------------------> #
+    # <------------------------- DATA CLEANING -------------------------> #
 
-    # dbc.Row(dbc.Col([html.H2('Data Cleaning')],width=12,
-    # className="title",style={"textAlign": "center"})),
+    dbc.Row(dbc.Col([html.H2('Data Cleaning')],width=12,
+    className="title",style={"textAlign": "center"})),
     
-    # # Duplicates and missing values
+    # Duplicates and missing values
 
-    # dbc.Row(dbc.Col([html.H3('Duplicates and Missing Values')],width=12,
-    #                         className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Duplicates and Missing Values')],width=12,
+                            className="subtitle",style={"textAlign": "left"})),
 
-    # dbc.Row(dbc.Col([html.P('This section shows if there is some duplicated\
-    #                           rows in the dataframe ' 
-    #                           ' and the number of missing data per feature')])),
+    dbc.Row(dbc.Col([html.P('This section shows if there is some duplicated\
+                              rows in the dataframe ' 
+                              ' and the number of missing data per feature')])),
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=duplicates)],width=3),\
-    #          dbc.Col([dcc.Graph(figure=missing_values)],width=9)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=duplicates)],width=3),\
+             dbc.Col([dcc.Graph(figure=missing_values)],width=9)]),
 
-    # dbc.Row(dbc.Col([html.P("The feature 'Cabin' has 690 missing values, this is \
-    #     more than 75% of the data, on account of that this column is dropped, \
-    #     whereas the feature 'Age' can be imputed using some characteristics like \
-    #     its mean, median or an estimator like the Knnimputer.")])),
+    dbc.Row(dbc.Col([html.P("The feature 'Cabin' has 690 missing values, this is \
+        more than 75% of the data, on account of that this column is dropped, \
+        whereas the feature 'Age' can be imputed using some characteristics like \
+        its mean, median or an estimator like the Knnimputer.")])),
 
 
-    # # Number of categories
+    # Number of categories
 
-    # dbc.Row(dbc.Col([html.H3('Categories Insights')],width=12,
-    #                         className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Categories Insights')],width=12,
+                            className="subtitle",style={"textAlign": "left"})),
 
-    # dbc.Row(dbc.Col([html.P("It is important to know what type of categorical \
-    # data is present in the data set, since with this information, it can be performed \
-    # a specific encoding. The data set has five categorical features: two nominal, \
-    # 'sex' and 'embarked', and three ordinal, 'Pclass', 'SibSp' and 'Parch'.\
-    # Each one has its own unique category, and the next graphs illustrate the \
-    # type and amount of each one.")])),
+    dbc.Row(dbc.Col([html.P("It is important to know what type of categorical \
+    data is present in the data set, since with this information, it can be performed \
+    a specific encoding. The data set has five categorical features: two nominal, \
+    'sex' and 'embarked', and three ordinal, 'Pclass', 'SibSp' and 'Parch'.\
+    Each one has its own unique category, and the next graphs illustrate the \
+    type and amount of each one.")])),
 
-    # dbc.Row(dbc.Col([dcc.Graph(figure=number_of_categories_1)],width=12)),
+    dbc.Row(dbc.Col([dcc.Graph(figure=number_of_categories_1)],width=12)),
 
-    # dbc.Row(dbc.Col([dcc.Graph(figure=number_of_categories_2)],width=12)),
+    dbc.Row(dbc.Col([dcc.Graph(figure=number_of_categories_2)],width=12)),
     
-    # dbc.Row(dbc.Col([html.P("For each feature, the size of \
-    # the square indicates  how much data belongs to the category labeled. One Hot \
-    # Encoder is applied to the two nominal features, and no transformation is done \
-    # for the rest of the features.")])),
+    dbc.Row(dbc.Col([html.P("For each feature, the size of \
+    the square indicates  how much data belongs to the category labeled. One Hot \
+    Encoder is applied to the two nominal features, and no transformation is done \
+    for the rest of the features.")])),
 
-    # # Outlier identification
+    # Outlier identification
 
-    # dbc.Row(dbc.Col([html.H3('Outlier Identification')],width=12,
-    #                         className="subtitle", style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Outlier Identification')],width=12,
+                            className="subtitle", style={"textAlign": "left"})),
     
-    # dbc.Row(dbc.Col([html.P('Since this is a purely visual aid, a rescaling of \
-    #                         all features is used, which rescaling (called Robust \
-    #                         Scaler) is robust to outliers, this was done to take \
-    #                         into account the target')])),
+    dbc.Row(dbc.Col([html.P('Since this is a purely visual aid, a rescaling of \
+                            all features is used, which rescaling (called Robust \
+                            Scaler) is robust to outliers, this was done to take \
+                            into account the target')])),
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=box_plot_pure)],width=4),
-    #     dbc.Col([dcc.Graph(figure=box_plot_lof)],width=4),
-    #     dbc.Col([dcc.Graph(figure=box_plot_ifo)],width=4)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=box_plot_pure)],width=4),
+        dbc.Col([dcc.Graph(figure=box_plot_lof)],width=4),
+        dbc.Col([dcc.Graph(figure=box_plot_ifo)],width=4)]),
 
-    #  # <------------------------- FEATURE SELECTION -------------------------> #
+     # <------------------------- FEATURE SELECTION -------------------------> #
 
-    #  dbc.Row(dbc.Col([html.H2('Feature Selection')],width=12,
-    #                       className="title",style={"textAlign": "center"})),   
+     dbc.Row(dbc.Col([html.H2('Feature Selection')],width=12,
+                          className="title",style={"textAlign": "center"})),   
 
-    #  dbc.Row(dbc.Col([html.P('This section shows some correlation metrics taking \
-    #                            into account the nature of the predictors, \
-    #                           that is, if they are categorical or numerical.')])),
+     dbc.Row(dbc.Col([html.P('This section shows some correlation metrics taking \
+                               into account the nature of the predictors, \
+                              that is, if they are categorical or numerical.')])),
 
-    # # # Pearson Correlation
+    # # Pearson Correlation
 
-    # dbc.Row(dbc.Col([html.H3('Statistical Feature Selection')],width=12,
-    #                         className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Statistical Feature Selection')],width=12,
+                            className="subtitle",style={"textAlign": "left"})),
 
-    # dbc.Row(dbc.Col([html.H5('Numerical Correlation')],width=12,
-    #                          className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H5('Numerical Correlation')],width=12,
+                             className="subtitle",style={"textAlign": "left"})),
     
-    # dbc.Row([ dbc.Col([dcc.Graph(figure=mutual_classification_correlation_num)],width=6),\
-    #          dbc.Col([dcc.Graph(figure=anova_correlation)],width=6)]),
+    dbc.Row([ dbc.Col([dcc.Graph(figure=mutual_classification_correlation_num)],width=6),\
+             dbc.Col([dcc.Graph(figure=anova_correlation)],width=6)]),
 
-    # dbc.Row(dbc.Col([html.P("The mutual information classification is a method that allows \
-    #     to encounter relationship between the categorical target and a numerical or categorical \
-    #     feature, the relationship measure between two random variables is a non-negative value, \
-    #     which decides the dependency between the variables. It is equal to zero if and only if two \
-    #     random variables are independent. When a variable is numeric and one is categorical, such \
-    #     as numerical input variables and a classification target variable in a classification task, \
-    #     an ANOVA f-test can be used. The anova and mutual information correlation shows that \
-    #     'fare' is more related to the target than the age.")])),
+    dbc.Row(dbc.Col([html.P("The mutual information classification is a method that allows \
+        to encounter relationship between the categorical target and a numerical or categorical \
+        feature, the relationship measure between two random variables is a non-negative value, \
+        which decides the dependency between the variables. It is equal to zero if and only if two \
+        random variables are independent. When a variable is numeric and one is categorical, such \
+        as numerical input variables and a classification target variable in a classification task, \
+        an ANOVA f-test can be used. The anova and mutual information correlation shows that \
+        'fare' is more related to the target than the age.")])),
 
-    # dbc.Row(dbc.Col([html.H5('Categorical Correlation')],width=12,
-    #                          className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H5('Categorical Correlation')],width=12,
+                             className="subtitle",style={"textAlign": "left"})),
     
-    # dbc.Row([dbc.Col([dcc.Graph(figure=chi2_correlation)],width=6),\
-    #          dbc.Col([dcc.Graph(figure=mutual_classification_correlation_cat)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=chi2_correlation)],width=6),\
+             dbc.Col([dcc.Graph(figure=mutual_classification_correlation_cat)],width=6)]),
 
-    #  dbc.Row(dbc.Col([html.P("Pearson's chi-squared statistical hypothesis test is \
-    #     a test for independence between categorical variables. Among the categorical features, the 'sex', 'class' and \
-    #     'embarked port' are the most relevant features. The importance of 'Parch' is vague.")])),
+     dbc.Row(dbc.Col([html.P("Pearson's chi-squared statistical hypothesis test is \
+        a test for independence between categorical variables. Among the categorical features, the 'sex', 'class' and \
+        'embarked port' are the most relevant features. The importance of 'Parch' is vague.")])),
 
 
-    # dbc.Row(dbc.Col([html.P('For the feature selection and data preprocessing many \
-    # combinations of transformations were made, the logistic regression model was \
-    # used as estimator (this because of the limited resources).')])),
+    dbc.Row(dbc.Col([html.P('For the feature selection and data preprocessing many \
+    combinations of transformations were made, the logistic regression model was \
+    used as estimator (this because of the limited resources).')])),
 
-    # dbc.Row(dbc.Col([html.P('At the final stage, the pipeline selected for the \
-    #     data preprocessing step is: ')])),
+    dbc.Row(dbc.Col([html.P('At the final stage, the pipeline selected for the \
+        data preprocessing step is: ')])),
 
-    # dbc.Row(dbc.Col([html.P("OneHotEncoder for the categorical data ('sex' and 'Embarked'), \
-    #  IsolationForest for the outlier data, SelectKBest(score_func=r_regression, k=1) for \
-    #  the numerical data, keep all categorical features and StandardScaler to rescale the data.")])),
+    dbc.Row(dbc.Col([html.P("OneHotEncoder for the categorical data ('sex' and 'Embarked'), \
+     IsolationForest for the outlier data, SelectKBest(score_func=r_regression, k=1) for \
+     the numerical data, keep all categorical features and StandardScaler to rescale the data.")])),
 
-    # # # <------------------------- MACHINE LEARNING MODELS -------------------------> #
+    # # <------------------------- MACHINE LEARNING MODELS -------------------------> #
 
-    # dbc.Row(dbc.Col([html.H2('Machine Learning Models')],width=12,
-    #                      className="title",style={"textAlign": "center"})), 
+    dbc.Row(dbc.Col([html.H2('Machine Learning Models')],width=12,
+                         className="title",style={"textAlign": "center"})), 
 
-    # dbc.Row(dbc.Col([html.P('Different machine learning models were used to prove \
-    # this data set, its election was made by its diversity nature.\
-    # Due to the limited resources, for the preprocessing step different models were \
-    # proven against the logistic model.')])),
+    dbc.Row(dbc.Col([html.P('Different machine learning models were used to prove \
+    this data set, its election was made by its diversity nature.\
+    Due to the limited resources, for the preprocessing step different models were \
+    proven against the logistic model.')])),
 
-    # dbc.Row(dbc.Col([html.H3('Sample Distribution')],width=12,
-    #                         className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Sample Distribution')],width=12,
+                            className="subtitle",style={"textAlign": "left"})),
 
-    # dbc.Row(dbc.Col([html.P('The figure shows the distributed labels of \
-    # the target on the training, validation and test set.')])),
+    dbc.Row(dbc.Col([html.P('The figure shows the distributed labels of \
+    the target on the training, validation and test set.')])),
 
-    # dbc.Row(dbc.Col([dcc.Graph(figure=sample_distribution_fig)],width=12)),
+    dbc.Row(dbc.Col([dcc.Graph(figure=sample_distribution_fig)],width=12)),
    
-    # # Polynomial Classification --------------------------------------------------->
+    # Polynomial Classification --------------------------------------------------->
 
-    # dbc.Row(dbc.Col([html.H3('Polynomial Classification [LogisticRegression]')],width=12,
-    #                         className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Polynomial Classification [LogisticRegression]')],width=12,
+                            className="subtitle",style={"textAlign": "left"})),
 
-    # dbc.Row(dbc.Col([html.P('The logistic regression is also known in the literature \
-    # as logit regression, maximum-entropy classification (MaxEnt) or the log-linear \
-    # classifier. It’s an extension of the linear regression model for classification \
-    # problems. In this case, multiple features were created by taking the n degree \
-    # of each feature in the original data set.')])),
+    dbc.Row(dbc.Col([html.P('The logistic regression is also known in the literature \
+    as logit regression, maximum-entropy classification (MaxEnt) or the log-linear \
+    classifier. It’s an extension of the linear regression model for classification \
+    problems. In this case, multiple features were created by taking the n degree \
+    of each feature in the original data set.')])),
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=f1_train_cv_poly_graph,config=draw_figure_buttons)],width=8),
-    #          dbc.Col([dcc.Graph(figure=accuracy_train_cv_poly_graph)],width=4)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=f1_train_cv_poly_graph,config=draw_figure_buttons)],width=8),
+             dbc.Col([dcc.Graph(figure=accuracy_train_cv_poly_graph)],width=4)]),
 
-    # dbc.Row(dbc.Col([html.P('The best degree with the lowest gap between the \
-    # train and CV accuracy is three. The next graphs are the confusion matrix \
-    # and the F1 metric. The first graph shows how much accuracy the model has \
-    # for each category, and the second one is used to encounter the best threshold \
-    # (the value used to label the probability as 0 or 1) using the highest value of F1.')])),
+    dbc.Row(dbc.Col([html.P('The best degree with the lowest gap between the \
+    train and CV accuracy is three. The next graphs are the confusion matrix \
+    and the F1 metric. The first graph shows how much accuracy the model has \
+    for each category, and the second one is used to encounter the best threshold \
+    (the value used to label the probability as 0 or 1) using the highest value of F1.')])),
 
-    # # Model Evalutaion
+    # Model Evalutaion
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=cm_train_poly)],width=6),dbc.Col([dcc.Graph(figure=pr_train_poly)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=cm_train_poly)],width=6),dbc.Col([dcc.Graph(figure=pr_train_poly)],width=6)]),
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=pr_cv_poly)],width=6),dbc.Col([dcc.Graph(figure=cm_cv_poly)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=pr_cv_poly)],width=6),dbc.Col([dcc.Graph(figure=cm_cv_poly)],width=6)]),
    
-    # dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_poly)],width=6),dbc.Col([dcc.Graph(figure=pr_test_poly)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_poly)],width=6),dbc.Col([dcc.Graph(figure=pr_test_poly)],width=6)]),
 
-    # dbc.Row(dbc.Col([html.P('In the training set, the model is more accurate than \
-    # 79% on each label, its best threshold is nearly 0.5, and the average precision \
-    # is 0.86, so the model is doing well on this set.  In the training set and test \
-    # set, the accuracy is at least 69%.  In conclusion, a polynomial regression model \
-    # performs well in this scenario. Classifiers with a well calibrated output are \
-    # probabilistic, for which the output of the predict_proba method can be directly \
-    # interpreted as a confidence level. The following graphs show how well calibrated \
-    # is the model, A well-calibrated model must have a calibration curve that is \
-    # increasing nearly linear and a histogram with large counting of probabilities \
-    # near zero and one.')])),
+    dbc.Row(dbc.Col([html.P('In the training set, the model is more accurate than \
+    79% on each label, its best threshold is nearly 0.5, and the average precision \
+    is 0.86, so the model is doing well on this set.  In the training set and test \
+    set, the accuracy is at least 69%.  In conclusion, a polynomial regression model \
+    performs well in this scenario. Classifiers with a well calibrated output are \
+    probabilistic, for which the output of the predict_proba method can be directly \
+    interpreted as a confidence level. The following graphs show how well calibrated \
+    is the model, A well-calibrated model must have a calibration curve that is \
+    increasing nearly linear and a histogram with large counting of probabilities \
+    near zero and one.')])),
 
-    # # Model Calibration
+    # Model Calibration
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=calibration_curve_poly)],width=8),dbc.Col([dcc.Graph(figure=histogram_poly)],width=4)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=calibration_curve_poly)],width=8),dbc.Col([dcc.Graph(figure=histogram_poly)],width=4)]),
 
 
-    # dbc.Row(dbc.Col([html.P('In this case, the logistic model calibration graphs \
-    # appear to have some good performance. The histogram has large counting \
-    # before 0.3 and after 0.8 and the curve is increasing, although some erratics points.')])),
+    dbc.Row(dbc.Col([html.P('In this case, the logistic model calibration graphs \
+    appear to have some good performance. The histogram has large counting \
+    before 0.3 and after 0.8 and the curve is increasing, although some erratics points.')])),
 
-    # dbc.Row(dbc.Col([html.H3('Ensemble Tree')],width=12,
-    #                         className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Ensemble Tree')],width=12,
+                            className="subtitle",style={"textAlign": "left"})),
 
-    # dbc.Row(dbc.Col([html.P('For this model multiple hyperparameters were tune, \
-    # like the learning rate, the max depth, gamma etc.  Its accuracy is superior \
-    # to the polynomial one, as its calibration curve, in specific, the curve has \
-    # less erratic values. The histogram does not show a significant improvement.')])),
+    dbc.Row(dbc.Col([html.P('For this model multiple hyperparameters were tune, \
+    like the learning rate, the max depth, gamma etc.  Its accuracy is superior \
+    to the polynomial one, as its calibration curve, in specific, the curve has \
+    less erratic values. The histogram does not show a significant improvement.')])),
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=cm_train_tree)],width=6),dbc.Col([dcc.Graph(figure=pr_train_tree)],width=6)]),
-    # dbc.Row([dbc.Col([dcc.Graph(figure=pr_cv_tree)],width=6),dbc.Col([dcc.Graph(figure=cm_cv_tree)],width=6)]),
-    # dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_tree)],width=6),dbc.Col([dcc.Graph(figure=pr_test_tree)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=cm_train_tree)],width=6),dbc.Col([dcc.Graph(figure=pr_train_tree)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=pr_cv_tree)],width=6),dbc.Col([dcc.Graph(figure=cm_cv_tree)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_tree)],width=6),dbc.Col([dcc.Graph(figure=pr_test_tree)],width=6)]),
     
-    # # Model Calibration
+    # Model Calibration
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=calibration_curve_tree)],width=8),dbc.Col([dcc.Graph(figure=histogram_tree)],width=4)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=calibration_curve_tree)],width=8),dbc.Col([dcc.Graph(figure=histogram_tree)],width=4)]),
 
-    # # Neural Network --------------------------------------------------------> #
+    # Neural Network --------------------------------------------------------> #
     
-    # dbc.Row(dbc.Col([html.H3('Neural Network')],width=12,
-    #                         className="subtitle",style={"textAlign": "left"})),
+    dbc.Row(dbc.Col([html.H3('Neural Network')],width=12,
+                            className="subtitle",style={"textAlign": "left"})),
 
-    # dbc.Row(dbc.Col([html.P('The next graph is a representation of the neural \
-    #     network model used, it shows the number and relative size of the layers \
-    #     as the relative number of connections')])),
+    dbc.Row(dbc.Col([html.P('The next graph is a representation of the neural \
+        network model used, it shows the number and relative size of the layers \
+        as the relative number of connections')])),
    
-    # dbc.Row(dbc.Col([dcc.Graph(figure=neural_network_graph)],width=12)),
+    dbc.Row(dbc.Col([dcc.Graph(figure=neural_network_graph)],width=12)),
     
-    # # Evaluation
+    # Evaluation
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=cm_train_network)],width=6),dbc.Col([dcc.Graph(figure=pr_train_network)],width=6)]),
-    # dbc.Row([dbc.Col([dcc.Graph(figure=pr_cv_network)],width=6),dbc.Col([dcc.Graph(figure=cm_cv_network)],width=6)]),
-    # dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_network)],width=6),dbc.Col([dcc.Graph(figure=pr_test_network)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=cm_train_network)],width=6),dbc.Col([dcc.Graph(figure=pr_train_network)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=pr_cv_network)],width=6),dbc.Col([dcc.Graph(figure=cm_cv_network)],width=6)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_network)],width=6),dbc.Col([dcc.Graph(figure=pr_test_network)],width=6)]),
 
-    # # Model Calibration
+    # Model Calibration
 
-    # dbc.Row([dbc.Col([dcc.Graph(figure=calibration_curve_network)],width=8),dbc.Col([dcc.Graph(figure=histogram_network)],width=4)]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=calibration_curve_network)],width=8),dbc.Col([dcc.Graph(figure=histogram_network)],width=4)]),
 
-    # dbc.Row(dbc.Col([html.P('Interestingly, this model has the highest performance \
-    # on the test set, but strangely its accuracy on the training set is the worst. \
-    # It has the best calibration histogram, which gives some reliability in its predictions.')])),   
+    dbc.Row(dbc.Col([html.P('Interestingly, this model has the highest performance \
+    on the test set, but strangely its accuracy on the training set is the worst. \
+    It has the best calibration histogram, which gives some reliability in its predictions.')])),   
     
     dbc.Row(dbc.Col([html.H3('Deploy')],width=12,
                             className="subtitle",style={"textAlign": "left"})),
@@ -855,7 +855,7 @@ app.layout = dbc.Container([
 
     dbc.Row(dbc.Col([input_table],width=12)),
     # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction',children=[],width=12)) 
+    dbc.Row(dbc.Col(id='prediction',children=[],width=12))
 
     # Ensemble Model --------------------------------------------------------> #
     
