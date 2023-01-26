@@ -18,3 +18,4 @@ tensorflow==2.8.1
 xgboost==1.7.1
 gunicorn
 dash-tools
+cudatoolkit
