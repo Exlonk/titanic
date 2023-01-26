@@ -875,10 +875,10 @@ app.layout = dbc.Container([
 
 @app.callback(
     Output('prediction','children'),
-    # Input('submit', 'n_clicks'),
+    Input('submit', 'n_clicks'),
     Input('table-editing-simple', 'data'))
 
-def prepare_data(data):
+def prepare_data(click,data):
     button_clicked = ctx.triggered_id
     if click == 0:
         try:
