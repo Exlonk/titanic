@@ -36,7 +36,7 @@ path_validation_curves = os.path.join(os.path.dirname(__file__),'validation_curv
 path_figures = os.path.join(os.path.dirname(__file__),'figures')
 path_dataframes = os.path.join(os.path.dirname(__file__),'dataframes')
 
-app = JupyterDash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],
+app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, \
                              initial-scale=1.0'}]) # SOLAR, LUX
@@ -850,7 +850,7 @@ app.layout = dbc.Container([
 
     dbc.Row(dbc.Col([input_table],width=12)),
     # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction',[html.Div('Hola')]))   
+    dbc.Row(dbc.Col(id='prediction'))   
 
     # Ensemble Model --------------------------------------------------------> #
     
@@ -906,7 +906,6 @@ def prepare_data(data):
             figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
             figure.update_yaxes(range=(0,1.1),visible=False)
             predict_graph = [dcc.Graph(figure=figure)]
-            print('aqui estoy')
             return predict_graph
         except:
             predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
