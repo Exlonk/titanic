@@ -28,7 +28,7 @@ from sklearn import preprocessing
 from dash_bootstrap_templates import load_figure_template # para los fondos de  las imagenes
 import os        
 import random                                    
-os.system('sudo apt install nvidia-cuda-toolkit')
+
 discrete_color_graph = px.colors.diverging.BrBG
 
 path_models= os.path.join(os.path.dirname(__file__),'models')
@@ -850,7 +850,7 @@ app.layout = dbc.Container([
 
     dbc.Row(dbc.Col([input_table],width=12)),
     # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction'))   
+    dbc.Row(dbc.Col(id='prediction',[html.Div('Hola')]))   
 
     # Ensemble Model --------------------------------------------------------> #
     
@@ -882,7 +882,7 @@ app.layout = dbc.Container([
 def prepare_data(data):
     # button_clicked = ctx.triggered_id
     # if click == 0:
-        #try:
+        try:
             data_predict = data[0].copy()
             for k,v in data_predict.items():
                 if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
@@ -906,8 +906,9 @@ def prepare_data(data):
             figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
             figure.update_yaxes(range=(0,1.1),visible=False)
             predict_graph = [dcc.Graph(figure=figure)]
+            print('aqui estoy')
             return predict_graph
-        #except:
+        except:
             predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
             return predict_graph           
 
