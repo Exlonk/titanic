@@ -1,10 +1,4 @@
 # Librerias
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import cross_val_score
-import plotly.express as px
-from sklearn import datasets
 from sklearn.linear_model import SGDRegressor
 from sklearn.model_selection import cross_val_predict
 import pandas as pd
@@ -12,6 +6,12 @@ import numpy as np
 from sklearn.model_selection import cross_val_score
 import plotly.express as px
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+import plotly.express as px
+from sklearn import datasets
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 from sklearn.svm import LinearSVR
@@ -850,8 +850,8 @@ app.layout = dbc.Container([
 
     dbc.Row(dbc.Col([input_table],width=12)),
     # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction'))   
-
+    dbc.Row(dbc.Col(id='prediction',[html.Div('hola')]),
+    dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_network)],width=6),dbc.Col([dcc.Graph(figure=pr_test_network)],width=6)]),
     # Ensemble Model --------------------------------------------------------> #
     
     # dbc.Row(dbc.Col([html.H3('Ensemble')],width=12,
