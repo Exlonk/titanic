@@ -850,8 +850,7 @@ app.layout = dbc.Container([
 
     dbc.Row(dbc.Col([input_table],width=12)),
     # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction')),
-    dbc.Row([dbc.Col([dcc.Graph(figure=cm_test_network)],width=6),dbc.Col([dcc.Graph(figure=pr_test_network)],width=6)]),
+    dbc.Row(dbc.Col(id='prediction'),width=12),
     # Ensemble Model --------------------------------------------------------> #
     
     # dbc.Row(dbc.Col([html.H3('Ensemble')],width=12,
@@ -880,9 +879,9 @@ app.layout = dbc.Container([
     Input('table-editing-simple', 'data'))
 
 def prepare_data(data):
-    # button_clicked = ctx.triggered_id
-    # if click == 0:
-        #try:
+    button_clicked = ctx.triggered_id
+    if click == 0:
+        try:
             data_predict = data[0].copy()
             for k,v in data_predict.items():
                 if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
@@ -907,39 +906,39 @@ def prepare_data(data):
             figure.update_yaxes(range=(0,1.1),visible=False)
             predict_graph = [dcc.Graph(figure=figure)]
             return predict_graph
-        #except:
+        except:
             predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
             return predict_graph           
 
-    # if button_clicked == 'submit':
-    #     try:
-    #         data_predict = data[0].copy()
-    #         for k,v in data_predict.items():
-    #             if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
-    #                 data_predict[k] = float(v)     
-    #         X_predict = pd.DataFrame([data_predict])        
-    #         X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)
-    #         X_predict = X_predict.astype('float64')
-    #         poly_features = PolynomialFeatures(degree=3, include_bias=False)
-    #         X_predict_poly = poly_features.fit_transform(X_predict)
-    #         y_pred_predict_prob_poly =  poly_model.predict_proba(X_predict_poly)[:,1]
-    #         y_pred_predict_prob_tree = tree_model.predict_proba(X_predict)[:,1]
-    #         y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()   
-    #         y_pred_predict_network = (y_pred_predict_prob_network >threshold_network).astype(int)
-    #         y_pred_predict_tree = (y_pred_predict_prob_tree >threshold_tree).astype(int)
-    #         y_pred_predict_poly = (y_pred_predict_prob_poly >threshold_poly).astype(int)
-    #         y_prob = [y_pred_predict_prob_poly[0], y_pred_predict_prob_tree[0], y_pred_predict_prob_network[0]]
-    #         y_fig = [y_pred_predict_poly[0],y_pred_predict_tree[0],y_pred_predict_network[0]]
-    #         x_fig = ['Polynomial','Ensemble Tree','Neural Network']
-    #         figure = px.bar(x=x_fig,y=y_fig,hover_data={'Probability':y_prob},title='Prediction Graph',labels={'x':'','y': 'Survive'})
-    #         figure.update_traces(texttemplate='%{y}',textposition='outside')
-    #         figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
-    #         figure.update_yaxes(range=(0,1.1),visible=False)
-    #         predict_graph = [dcc.Graph(figure=figure)]
-    #         return predict_graph
-    #     except:
-    #         predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
-    #         return predict_graph
+    if button_clicked == 'submit':
+         try:
+             data_predict = data[0].copy()
+             for k,v in data_predict.items():
+                 if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
+                     data_predict[k] = float(v)     
+             X_predict = pd.DataFrame([data_predict])        
+             X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)
+             X_predict = X_predict.astype('float64')
+             poly_features = PolynomialFeatures(degree=3, include_bias=False)
+             X_predict_poly = poly_features.fit_transform(X_predict)
+             y_pred_predict_prob_poly =  poly_model.predict_proba(X_predict_poly)[:,1]
+             y_pred_predict_prob_tree = tree_model.predict_proba(X_predict)[:,1]
+             y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()   
+             y_pred_predict_network = (y_pred_predict_prob_network >threshold_network).astype(int)
+             y_pred_predict_tree = (y_pred_predict_prob_tree >threshold_tree).astype(int)
+             y_pred_predict_poly = (y_pred_predict_prob_poly >threshold_poly).astype(int)
+             y_prob = [y_pred_predict_prob_poly[0], y_pred_predict_prob_tree[0], y_pred_predict_prob_network[0]]
+             y_fig = [y_pred_predict_poly[0],y_pred_predict_tree[0],y_pred_predict_network[0]]
+             x_fig = ['Polynomial','Ensemble Tree','Neural Network']
+             figure = px.bar(x=x_fig,y=y_fig,hover_data={'Probability':y_prob},title='Prediction Graph',labels={'x':'','y': 'Survive'})
+             figure.update_traces(texttemplate='%{y}',textposition='outside')
+             figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+             figure.update_yaxes(range=(0,1.1),visible=False)
+             predict_graph = [dcc.Graph(figure=figure)]
+             return predict_graph
+         except:
+             predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
+             return predict_graph
   
 
 if __name__ == '__main__':
