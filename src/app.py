@@ -31,7 +31,7 @@ import random
 
 discrete_color_graph = px.colors.diverging.BrBG
 
-path_models= os.path.join(os.path.dirname(__file__),'models')
+path_models= os.path.join(os.path.dirname(__file__),'models') 
 path_validation_curves = os.path.join(os.path.dirname(__file__),'validation_curves')
 path_figures = os.path.join(os.path.dirname(__file__),'figures')
 path_dataframes = os.path.join(os.path.dirname(__file__),'dataframes')
