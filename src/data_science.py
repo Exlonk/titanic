@@ -27,6 +27,13 @@ from jupyter_dash import JupyterDash
 import os
 
 # <-------------------------- GENERAL PYTHON --------------------------------> #
+def model(X,threshold_network):
+    import tensorflow as tf
+    path_models= os.path.join(os.path.dirname(__file__),'models')
+    neural_model = tf.keras.models.load_model(os.path.join(path_models,'neural_network.h5'))
+    y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X))).numpy().flatten()
+    y_pred_predict_network = (y_pred_predict_prob_network >threshold_network).astype(int)
+    return y_pred_predict_network 
 
 def import_module():
     # from importlib.machinery import SourceFileLoader

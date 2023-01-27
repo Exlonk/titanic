@@ -1,6 +1,7 @@
 # Librerias
 import pandas as pd
 import numpy as np
+import time
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 import plotly.express as px
@@ -28,6 +29,11 @@ from sklearn import preprocessing
 from dash_bootstrap_templates import load_figure_template # para los fondos de  las imagenes
 import os        
 import random                                    
+from dash import DiskcacheManager
+import diskcache
+import dash 
+cache = diskcache.Cache("./cache")
+background_callback_manager = DiskcacheManager(cache)
 
 discrete_color_graph = px.colors.diverging.BrBG
 
@@ -36,7 +42,7 @@ path_validation_curves = os.path.join(os.path.dirname(__file__),'validation_curv
 path_figures = os.path.join(os.path.dirname(__file__),'figures')
 path_dataframes = os.path.join(os.path.dirname(__file__),'dataframes')
 
-app = JupyterDash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],
+app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],background_callback_manager=background_callback_manager,
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, \
                              initial-scale=1.0'}]) # SOLAR, LUX
@@ -111,8 +117,8 @@ box_plot_lof.update_xaxes(range=[-0.5,1.5])
 # X_transform_ifo = X_transform_ifo.drop(columns=['SibSp'])
 
 
-# <--------------------------------------------------------------------------> #
-# <----------------------------- DATA SPLIT ---------------------------------> #
+# # <--------------------------------------------------------------------------> #
+# # <----------------------------- DATA SPLIT ---------------------------------> #
 
 X_train = pd.read_csv(os.path.join(path_dataframes,'X_train.csv'))
 X_cv = pd.read_csv(os.path.join(path_dataframes,'X_cv.csv'))
@@ -120,8 +126,13 @@ X_test = pd.read_csv(os.path.join(path_dataframes,'X_test.csv'))
 y_train = pd.read_csv(os.path.join(path_dataframes,'y_train.csv'))
 y_cv = pd.read_csv(os.path.join(path_dataframes,'y_cv.csv'))
 y_test = pd.read_csv(os.path.join(path_dataframes,'y_test.csv'))
-
-# Sample Distribution --------------------------------------------------------->
+X_train = pd.read_csv(os.path.join(path_dataframes,'X_train.csv'))
+X_cv = pd.read_csv(os.path.join(path_dataframes,'X_cv.csv'))
+X_test = pd.read_csv(os.path.join(path_dataframes,'X_test.csv'))
+y_train = pd.read_csv(os.path.join(path_dataframes,'y_train.csv'))
+y_cv = pd.read_csv(os.path.join(path_dataframes,'y_cv.csv'))
+y_test = pd.read_csv(os.path.join(path_dataframes,'y_test.csv'))
+# # Sample Distribution --------------------------------------------------------->
 
 y_train_sample = pd.DataFrame(y_train).copy()
 y_train_sample['set']='train'
@@ -286,7 +297,6 @@ from tensorflow.keras.losses import BinaryCrossentropy
 from sklearn.metrics import r2_score
 from sklearn.metrics import f1_score
 from joblib import dump, load
-from scikeras.wrappers import KerasClassifier
 import pickle
 
 neural_network_graph = ds.neural_network_fig([1,70,30,10,5,1])
@@ -334,7 +344,6 @@ elif neural_mode == 'design':
     y_pred_train_prob_network = (tf.nn.sigmoid(neural_model.predict(X_train))).numpy().flatten() # (tf.nn.sigmoid(neural_model.predict(X_train))).numpy()
     y_pred_cv_prob_network = (tf.nn.sigmoid(neural_model.predict(X_cv))).numpy().flatten() # (tf.nn.sigmoid(neural_model.predict(X_cv))).numpy()
     y_pred_test_prob_network =  (tf.nn.sigmoid(neural_model.predict(X_test))).numpy().flatten() # (tf.nn.sigmoid(neural_model.predict(X_test))).numpy()
-        
 # Model Evaluation
 
 pr_train_network, cm_train_network,pr_cv_network,cm_cv_network,pr_test_network,cm_test_network,threshold_network \
@@ -424,7 +433,7 @@ from sklearn.feature_selection import chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import IsolationForest
 
-df_ = pd.read_csv('titanic.csv') # './titanic.py'
+df_ = pd.read_csv(os.path.join(os.path.dirname(__file__),'titanic.csv')) # './titanic.py'
 
 # Quitar Filas Irrelevantes
 
@@ -849,8 +858,10 @@ app.layout = dbc.Container([
         editing the table and pressing Enter.')])),
 
     dbc.Row(dbc.Col([input_table],width=12)),
-    # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction'))   
+    dbc.Row(dbc.Col([ html.Progress(id="progress_bar", value="0")],width=2)),
+    dbc.Row([dbc.Col(id='prediction1',children=[],width=8),
+            dbc.Col(id='prediction2',children=[],width=4)]),
+    dcc.Store(id='intermediate-value'),
 
     # Ensemble Model --------------------------------------------------------> #
     
@@ -875,41 +886,73 @@ app.layout = dbc.Container([
   ],className="container")
 
 @app.callback(
-    Output('prediction','children'),
+    Output('prediction1','children'),
+    Output('intermediate-value', 'data'),
     # Input('submit', 'n_clicks'),
-    Input('table-editing-simple', 'data'))
+    Input('table-editing-simple', 'data'),
+    background=True,
+    prevent_initial_call=False,
+     running=[
+        (
+            Output("progress_bar", "style"),
+            {"visibility": "visible"},
+            {"visibility": "hidden"},
+        )
+     ],
+     progress=[Output("progress_bar", "value"), Output("progress_bar", "max")],
+    )
 
-def prepare_data(data):
+def sklearn_models(set_progress,data):
     # button_clicked = ctx.triggered_id
-    # if click == 0:
+# if click == 0:
+        total = 5
+        for i in range(total + 1):
+            set_progress((str(i), str(total)))
+            time.sleep(1)
         try:
             data_predict = data[0].copy()
+            
             for k,v in data_predict.items():
                 if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
                     data_predict[k] = float(v)     
             X_predict = pd.DataFrame([data_predict])        
-            X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)
+            X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)           
             X_predict = X_predict.astype('float64')
+
+            #print('1')
             poly_features = PolynomialFeatures(degree=3, include_bias=False)
+            #print('2')
             X_predict_poly = poly_features.fit_transform(X_predict)
+            #print('3')
             y_pred_predict_prob_poly =  poly_model.predict_proba(X_predict_poly)[:,1]
+            #print('4')
             y_pred_predict_prob_tree = tree_model.predict_proba(X_predict)[:,1]
-            y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()   
-            y_pred_predict_network = (y_pred_predict_prob_network >threshold_network).astype(int)
+           # print('5')
+            #y = ds.model(X_predict,threshold_network)
+            #y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()
+            #print('6')   
+            #y_pred_predict_network = (y_pred_predict_prob_network >threshold_network).astype(int)
+            #print('7')
             y_pred_predict_tree = (y_pred_predict_prob_tree >threshold_tree).astype(int)
+            #print('8')
             y_pred_predict_poly = (y_pred_predict_prob_poly >threshold_poly).astype(int)
-            y_prob = [y_pred_predict_prob_poly[0], y_pred_predict_prob_tree[0], y_pred_predict_prob_network[0]]
-            y_fig = [y_pred_predict_poly[0],y_pred_predict_tree[0],y_pred_predict_network[0]]
-            x_fig = ['Polynomial','Ensemble Tree','Neural Network']
+            #print('9')
+            y_prob = [y_pred_predict_prob_poly[0], y_pred_predict_prob_tree[0]] #, y_pred_predict_prob_network]
+            #print('10')
+            y_fig = [y_pred_predict_poly[0],y_pred_predict_tree[0]] # ,y_pred_predict_network]
+            #print('11')
+            #print(y_prob)
+            #print(y_fig)
+            x_fig = ['Polynomial','Ensemble Tree'] #,'Neural Network']
             figure = px.bar(x=x_fig,y=y_fig,hover_data={'Probability':y_prob},title='Prediction Graph',labels={'x':'','y': 'Survive'})
             figure.update_traces(texttemplate='%{y}',textposition='outside')
             figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
             figure.update_yaxes(range=(0,1.1),visible=False)
             predict_graph = [dcc.Graph(figure=figure)]
-            return predict_graph
+            return predict_graph, X_predict.to_json(date_format='iso', orient='split')
         except:
-            predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
-            return predict_graph           
+             predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
+             return predict_graph, X_predict.to_json(date_format='iso', orient='split')          
 
     # if button_clicked == 'submit':
     #     try:
@@ -920,6 +963,7 @@ def prepare_data(data):
     #         X_predict = pd.DataFrame([data_predict])        
     #         X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)
     #         X_predict = X_predict.astype('float64')
+
     #         poly_features = PolynomialFeatures(degree=3, include_bias=False)
     #         X_predict_poly = poly_features.fit_transform(X_predict)
     #         y_pred_predict_prob_poly =  poly_model.predict_proba(X_predict_poly)[:,1]
@@ -940,7 +984,31 @@ def prepare_data(data):
     #     except:
     #         predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
     #         return predict_graph
-  
+
+@app.callback(
+    Output('prediction2','children'),
+    # Input('submit', 'n_clicks'),
+    Input('intermediate-value', 'data'),
+    )
+
+def neural_model_(data):
+    X_predict = pd.read_json(data, orient='split')
+    # total = 5
+    # for i in range(total + 1):
+    #     set_progress((str(i), str(total)))
+    #     time.sleep(1)
+    try:
+        y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()
+        y_pred_predict_network = (y_pred_predict_prob_network[0] > threshold_network).astype(int)
+        figure = px.bar(x=['neural'],y=[y_pred_predict_network],hover_data={'Probability':[y_pred_predict_prob_network[0]]},title='',labels={'x':'','y': 'Survive'})
+        figure.update_traces(texttemplate='%{y}',textposition='outside')
+        figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+        figure.update_yaxes(range=(0,1.1),visible=False)
+        predict_graph = [dcc.Graph(figure=figure)]
+        return predict_graph
+    except:
+         predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
+         return predict_graph  
 
 if __name__ == '__main__':
-      app.run_server(debug=True,port=8051)
+      app.run_server(port=8055,debug=True)
