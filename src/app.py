@@ -1012,4 +1012,4 @@ def neural_model_(data):
          return predict_graph  
 
 if __name__ == '__main__':
-      app.run_server(port=8055,debug=True)
+      app.run_server()
