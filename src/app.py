@@ -31,7 +31,7 @@ import random
 
 from dash import DiskcacheManager
 import diskcache
-cache = diskcache.Cache("./cache")
+cache = diskcache.Cache("./cache") 
 background_callback_manager = DiskcacheManager(cache)
 
 discrete_color_graph = px.colors.diverging.BrBG
