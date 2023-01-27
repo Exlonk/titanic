@@ -30,7 +30,7 @@ import os
 import random                                    
 
 from dash.long_callback import DiskcacheLongCallbackManager
-import diskcache
+import diskcache 
 cache = diskcache.Cache("./cache")
 long_callback_manager = DiskcacheLongCallbackManager(cache)
 
