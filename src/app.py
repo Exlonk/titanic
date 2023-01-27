@@ -29,10 +29,10 @@ from dash_bootstrap_templates import load_figure_template # para los fondos de  
 import os        
 import random                                    
 
-from dash.long_callback import DiskcacheLongCallbackManager
-import diskcache 
+from dash import DiskcacheManager
+import diskcache
 cache = diskcache.Cache("./cache")
-long_callback_manager = DiskcacheLongCallbackManager(cache)
+background_callback_manager = DiskcacheManager(cache)
 
 discrete_color_graph = px.colors.diverging.BrBG
 
@@ -886,15 +886,12 @@ containe = dbc.Container([
 
 app.layout = container
 
-app.validation_layout = container
-
-
 @app.long_callback(
     Output('prediction','children'),
     # Input('submit', 'n_clicks'),
     Input('table-editing-simple', 'data'),
-    manager=long_callback_manager,
-    prevent_initial_call=True)
+    background=True,
+    manager=background_callback_manager,)
 
 def prepare_data(data):
     # button_clicked = ctx.triggered_id
