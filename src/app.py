@@ -599,7 +599,7 @@ draw_figure_buttons = {'modeBarButtonsToAdd':['drawline',
                                         'eraseshape'
                                        ]}
 
-app.layout = dbc.Container([ 
+containe = dbc.Container([ 
 
     dbc.Row(dbc.Col([html.H1('Titanic DataFrame')],width=6,className="title")),
      dbc.Row(dbc.Col([html.H4('by Exlonk Gil')],width=12)),
@@ -884,11 +884,17 @@ app.layout = dbc.Container([
   # Layoud close
   ],className="container")
 
+app.layout = container
+
+app.validation_layout = container
+
+
 @app.long_callback(
     Output('prediction','children'),
     # Input('submit', 'n_clicks'),
     Input('table-editing-simple', 'data'),
-    manager=long_callback_manager,)
+    manager=long_callback_manager,
+    prevent_initial_call=True)
 
 def prepare_data(data):
     # button_clicked = ctx.triggered_id
