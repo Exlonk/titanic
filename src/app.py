@@ -29,6 +29,11 @@ from dash_bootstrap_templates import load_figure_template # para los fondos de  
 import os        
 import random                                    
 
+from dash.long_callback import DiskcacheLongCallbackManager
+import diskcache
+cache = diskcache.Cache("./cache")
+long_callback_manager = DiskcacheLongCallbackManager(cache)
+
 discrete_color_graph = px.colors.diverging.BrBG
 
 path_models= os.path.join(os.path.dirname(__file__),'models')
@@ -36,7 +41,7 @@ path_validation_curves = os.path.join(os.path.dirname(__file__),'validation_curv
 path_figures = os.path.join(os.path.dirname(__file__),'figures')
 path_dataframes = os.path.join(os.path.dirname(__file__),'dataframes')
 
-app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],
+app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO], 
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, \
                              initial-scale=1.0'}]) # SOLAR, LUX
@@ -879,10 +884,11 @@ app.layout = dbc.Container([
   # Layoud close
   ],className="container")
 
-@app.callback(
+@app.long_callback(
     Output('prediction','children'),
     # Input('submit', 'n_clicks'),
-    Input('table-editing-simple', 'data'))
+    Input('table-editing-simple', 'data'),
+    manager=long_callback_manager,)
 
 def prepare_data(data):
     # button_clicked = ctx.triggered_id
