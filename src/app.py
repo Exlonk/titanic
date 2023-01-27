@@ -1,6 +1,7 @@
 # Librerias
 import pandas as pd
 import numpy as np
+import time
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 import plotly.express as px
@@ -28,10 +29,9 @@ from sklearn import preprocessing
 from dash_bootstrap_templates import load_figure_template # para los fondos de  las imagenes
 import os        
 import random                                    
-
 from dash import DiskcacheManager
 import diskcache
-cache = diskcache.Cache("./cache") 
+cache = diskcache.Cache("./cache")
 background_callback_manager = DiskcacheManager(cache)
 
 discrete_color_graph = px.colors.diverging.BrBG
@@ -41,7 +41,7 @@ path_validation_curves = os.path.join(os.path.dirname(__file__),'validation_curv
 path_figures = os.path.join(os.path.dirname(__file__),'figures')
 path_dataframes = os.path.join(os.path.dirname(__file__),'dataframes')
 
-app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO], 
+app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],background_callback_manager=background_callback_manager,
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, \
                              initial-scale=1.0'}]) # SOLAR, LUX
@@ -434,7 +434,7 @@ from sklearn.feature_selection import chi2
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import IsolationForest
 
-df_ = pd.read_csv('titanic.csv') # './titanic.py'
+df_ = pd.read_csv(os.path.join(os.path.dirname(__file__),'titanic.csv')) # './titanic.py'
 
 # Quitar Filas Irrelevantes
 
@@ -599,7 +599,7 @@ draw_figure_buttons = {'modeBarButtonsToAdd':['drawline',
                                         'eraseshape'
                                        ]}
 
-containe = dbc.Container([ 
+app.layout = dbc.Container([ 
 
     dbc.Row(dbc.Col([html.H1('Titanic DataFrame')],width=6,className="title")),
      dbc.Row(dbc.Col([html.H4('by Exlonk Gil')],width=12)),
@@ -859,8 +859,8 @@ containe = dbc.Container([
         editing the table and pressing Enter.')])),
 
     dbc.Row(dbc.Col([input_table],width=12)),
-    # dbc.Row(dbc.Col([html.Button('Submit', id='submit', n_clicks=0)],width=2)),
-    dbc.Row(dbc.Col(id='prediction',children=[],width=12))
+    dbc.Row(dbc.Col([ html.Progress(id="progress_bar", value="0")],width=2)),
+    dbc.Row(dbc.Col(id='prediction',children=[]))  
 
     # Ensemble Model --------------------------------------------------------> #
     
@@ -884,37 +884,63 @@ containe = dbc.Container([
   # Layoud close
   ],className="container")
 
-app.layout = container
-
-@app.long_callback(
+@app.callback(
     Output('prediction','children'),
     # Input('submit', 'n_clicks'),
     Input('table-editing-simple', 'data'),
     background=True,
-    manager=background_callback_manager,)
+    prevent_initial_call=False,
+     running=[
+        (
+            Output("progress_bar", "style"),
+            {"visibility": "visible"},
+            {"visibility": "hidden"},
+        )
+     ],
+     progress=[Output("progress_bar", "value"), Output("progress_bar", "max")],
+    )
 
-def prepare_data(data):
+def prepare_data(set_progress,data):
     # button_clicked = ctx.triggered_id
-    # if click == 0:
+# if click == 0:
+        total = 5
+        for i in range(total + 1):
+            set_progress((str(i), str(total)))
+            time.sleep(1)
         try:
             data_predict = data[0].copy()
+            
             for k,v in data_predict.items():
                 if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
                     data_predict[k] = float(v)     
             X_predict = pd.DataFrame([data_predict])        
             X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)
+            
             X_predict = X_predict.astype('float64')
+            #print('1')
             poly_features = PolynomialFeatures(degree=3, include_bias=False)
+            #print('2')
             X_predict_poly = poly_features.fit_transform(X_predict)
+            #print('3')
             y_pred_predict_prob_poly =  poly_model.predict_proba(X_predict_poly)[:,1]
+            #print('4')
             y_pred_predict_prob_tree = tree_model.predict_proba(X_predict)[:,1]
-            y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()   
-            y_pred_predict_network = (y_pred_predict_prob_network >threshold_network).astype(int)
+            #print('5')
+            #y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()
+            #print('6')   
+            #y_pred_predict_network = (y_pred_predict_prob_network >threshold_network).astype(int)
+            #print('7')
             y_pred_predict_tree = (y_pred_predict_prob_tree >threshold_tree).astype(int)
+            #print('8')
             y_pred_predict_poly = (y_pred_predict_prob_poly >threshold_poly).astype(int)
-            y_prob = [y_pred_predict_prob_poly[0], y_pred_predict_prob_tree[0], y_pred_predict_prob_network[0]]
-            y_fig = [y_pred_predict_poly[0],y_pred_predict_tree[0],y_pred_predict_network[0]]
-            x_fig = ['Polynomial','Ensemble Tree','Neural Network']
+            #print('9')
+            y_prob = [y_pred_predict_prob_poly[0], y_pred_predict_prob_tree[0]] #, y_pred_predict_prob_network]
+            #print('10')
+            y_fig = [y_pred_predict_poly[0],y_pred_predict_tree[0]] # ,y_pred_predict_network]
+            #print('11')
+            #print(y_prob)
+            #print(y_fig)
+            x_fig = ['Polynomial','Ensemble Tree'] #,'Neural Network']
             figure = px.bar(x=x_fig,y=y_fig,hover_data={'Probability':y_prob},title='Prediction Graph',labels={'x':'','y': 'Survive'})
             figure.update_traces(texttemplate='%{y}',textposition='outside')
             figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
@@ -922,8 +948,8 @@ def prepare_data(data):
             predict_graph = [dcc.Graph(figure=figure)]
             return predict_graph
         except:
-            predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
-            return predict_graph           
+             predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
+             return predict_graph           
 
     # if button_clicked == 'submit':
     #     try:
@@ -934,6 +960,7 @@ def prepare_data(data):
     #         X_predict = pd.DataFrame([data_predict])        
     #         X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)
     #         X_predict = X_predict.astype('float64')
+
     #         poly_features = PolynomialFeatures(degree=3, include_bias=False)
     #         X_predict_poly = poly_features.fit_transform(X_predict)
     #         y_pred_predict_prob_poly =  poly_model.predict_proba(X_predict_poly)[:,1]
@@ -957,4 +984,4 @@ def prepare_data(data):
   
 
 if __name__ == '__main__':
-      app.run_server(port=8051)
+      app.run_server(port=8055,debug=True)
