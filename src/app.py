@@ -855,8 +855,8 @@ app.layout = dbc.Container([
     dbc.Row(dbc.Col([html.H3('Deploy')],width=12,
                             className="subtitle",style={"textAlign": "left"})),
 
-    dbc.Row(dbc.Col([html.P('In this section, you can prove the models by \
-        editing the table and pressing Enter.')])),
+    dbc.Row(dbc.Col([html.P('In this section, you can prove two of the three models \
+    by editing the table and pressing Enter.')])),
 
     dbc.Row(dbc.Col([input_table],width=12)),
     dbc.Row(dbc.Col([ html.Progress(id="progress_bar", value="0")],width=2)),
@@ -984,4 +984,4 @@ def prepare_data(set_progress,data):
   
 
 if __name__ == '__main__':
-      app.run_server(port=8055,debug=True)
+      app.run_server()
