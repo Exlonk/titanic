@@ -31,6 +31,7 @@ import os
 import random                                    
 from dash import DiskcacheManager
 import diskcache
+import dash 
 cache = diskcache.Cache("./cache")
 background_callback_manager = DiskcacheManager(cache)
 
@@ -343,7 +344,6 @@ elif neural_mode == 'design':
     y_pred_train_prob_network = (tf.nn.sigmoid(neural_model.predict(X_train))).numpy().flatten() # (tf.nn.sigmoid(neural_model.predict(X_train))).numpy()
     y_pred_cv_prob_network = (tf.nn.sigmoid(neural_model.predict(X_cv))).numpy().flatten() # (tf.nn.sigmoid(neural_model.predict(X_cv))).numpy()
     y_pred_test_prob_network =  (tf.nn.sigmoid(neural_model.predict(X_test))).numpy().flatten() # (tf.nn.sigmoid(neural_model.predict(X_test))).numpy()
-    
 # Model Evaluation
 
 pr_train_network, cm_train_network,pr_cv_network,cm_cv_network,pr_test_network,cm_test_network,threshold_network \
@@ -854,12 +854,15 @@ app.layout = dbc.Container([
     dbc.Row(dbc.Col([html.H3('Deploy')],width=12,
                             className="subtitle",style={"textAlign": "left"})),
 
-    dbc.Row(dbc.Col([html.P('In this section, you can prove two of three models by \
+    dbc.Row(dbc.Col([html.P('In this section, you can prove the models by \
         editing the table and pressing Enter.')])),
 
     dbc.Row(dbc.Col([input_table],width=12)),
     dbc.Row(dbc.Col([ html.Progress(id="progress_bar", value="0")],width=2)),
-    dbc.Row(dbc.Col(id='prediction',children=[]))  
+    dbc.Row([dbc.Col(id='prediction1',children=[],width=8),
+            dcc.Store(id='intermediate-value'),
+            dbc.Col(id='prediction2',children=[],width=4)]),
+    
 
     # Ensemble Model --------------------------------------------------------> #
     
@@ -884,7 +887,8 @@ app.layout = dbc.Container([
   ],className="container")
 
 @app.callback(
-    Output('prediction','children'),
+    Output('prediction1','children'),
+    Output('intermediate-value', 'data'),
     # Input('submit', 'n_clicks'),
     Input('table-editing-simple', 'data'),
     background=True,
@@ -899,7 +903,7 @@ app.layout = dbc.Container([
      progress=[Output("progress_bar", "value"), Output("progress_bar", "max")],
     )
 
-def prepare_data(set_progress,data):
+def sklearn_models(set_progress,data):
     # button_clicked = ctx.triggered_id
 # if click == 0:
         total = 5
@@ -913,9 +917,9 @@ def prepare_data(set_progress,data):
                 if k in ['Age','Fare','Pclass','SibSp','Parch','Fare']:
                     data_predict[k] = float(v)     
             X_predict = pd.DataFrame([data_predict])        
-            X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)
-            
+            X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)           
             X_predict = X_predict.astype('float64')
+
             #print('1')
             poly_features = PolynomialFeatures(degree=3, include_bias=False)
             #print('2')
@@ -924,7 +928,7 @@ def prepare_data(set_progress,data):
             y_pred_predict_prob_poly =  poly_model.predict_proba(X_predict_poly)[:,1]
             #print('4')
             y_pred_predict_prob_tree = tree_model.predict_proba(X_predict)[:,1]
-            #print('5')
+           # print('5')
             #y = ds.model(X_predict,threshold_network)
             #y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()
             #print('6')   
@@ -946,10 +950,10 @@ def prepare_data(set_progress,data):
             figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
             figure.update_yaxes(range=(0,1.1),visible=False)
             predict_graph = [dcc.Graph(figure=figure)]
-            return predict_graph
+            return predict_graph, X_predict.to_json(date_format='iso', orient='split')
         except:
              predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
-             return predict_graph           
+             return predict_graph, X_predict.to_json(date_format='iso', orient='split')          
 
     # if button_clicked == 'submit':
     #     try:
@@ -981,7 +985,31 @@ def prepare_data(set_progress,data):
     #     except:
     #         predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
     #         return predict_graph
-  
+
+@app.callback(
+    Output('prediction2','children'),
+    # Input('submit', 'n_clicks'),
+    Input('intermediate-value', 'data'),
+    )
+
+def neural_model_(data):
+    X_predict = pd.read_json(data, orient='split')
+    # total = 5
+    # for i in range(total + 1):
+    #     set_progress((str(i), str(total)))
+    #     time.sleep(1)
+    try:
+        y_pred_predict_prob_network = (tf.nn.sigmoid(neural_model.predict(X_predict))).numpy().flatten()
+        y_pred_predict_network = (y_pred_predict_prob_network[0] > threshold_network).astype(int)
+        figure = px.bar(x=['neural'],y=[y_pred_predict_network],hover_data={'Probability':[y_pred_predict_prob_network[0]]},title='',labels={'x':'','y': 'Survive'})
+        figure.update_traces(texttemplate='%{y}',textposition='outside')
+        figure.update_layout(paper_bgcolor="#0f2537",plot_bgcolor='#0f2537',font={'color':'#ffffff'})
+        figure.update_yaxes(range=(0,1.1),visible=False)
+        predict_graph = [dcc.Graph(figure=figure)]
+        return predict_graph
+    except:
+         predict_graph = [html.Br(),html.Div('The input data has an error or is taken by model like atypical data'),html.Br()]
+         return predict_graph  
 
 if __name__ == '__main__':
       app.run_server(port=8055,debug=True)
