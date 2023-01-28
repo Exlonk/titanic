@@ -42,7 +42,8 @@ path_validation_curves = os.path.join(os.path.dirname(__file__),'validation_curv
 path_figures = os.path.join(os.path.dirname(__file__),'figures')
 path_dataframes = os.path.join(os.path.dirname(__file__),'dataframes')
 
-app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],background_callback_manager=background_callback_manager,
+app = Dash(__name__,external_stylesheets=[dbc.themes.SUPERHERO],title='Titanic',\
+                background_callback_manager=background_callback_manager,
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, \
                              initial-scale=1.0'}]) # SOLAR, LUX
@@ -840,10 +841,10 @@ def sklearn_models(set_progress,data):
         X_predict = pd.DataFrame([data_predict])        
         X_predict = transform_instance(preprocessor_imputer,preprocessor_encoder,outlier_,num,cat,scaler,X_predict)           
         X_predict = X_predict.astype('float64')
-        print('5')
-        neural_network = tf.keras.models.load_model(os.path.join(path_models,'neural_network_2.h5'))
+        #print('5')
+        neural_network = tf.keras.models.load_model(os.path.join(path_models,'neural_network.h5'))
         y_pred_predict_prob_network = (tf.nn.sigmoid(neural_network.predict(X_predict))).numpy().flatten()
-        print('6')   
+        #print('6')   
         y_pred_predict_network = (y_pred_predict_prob_network[0] > 0.2939114570617676).astype(int)
         #print('1')
         poly_features = PolynomialFeatures(degree=3, include_bias=False)
@@ -876,4 +877,4 @@ def sklearn_models(set_progress,data):
         return predict_graph          
 
 if __name__ == '__main__':
-      app.run_server(port=8055,debug=True)
+      app.run_server()
